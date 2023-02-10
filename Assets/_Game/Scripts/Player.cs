@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed = 0.1f;
     [SerializeField] Rigidbody rb;
     [SerializeField] GameObject Object;
-
+    [SerializeField] public GameObject gameController;
     [SerializeField] Stack<GameObject> brickUp = new Stack<GameObject>();
 
     bool IsMove = false;
@@ -15,15 +15,14 @@ public class Player : MonoBehaviour
     Vector3 target = new Vector3();
     Vector3 direction = new Vector3();
 
-    public GameObject gameController;
-    private Vector3 currentTranform;
+   
 
     [SerializeField] private float force = 400f;
     int count = 2;
     private Vector3 stack = new Vector3(0, 0.25f, 0);
     void Start()
     {
-        currentTranform = new Vector3(0, transform.position.y, 0);
+        
         gameController = GameObject.FindGameObjectWithTag("GameController");
         direction = Vector3.right;
         target = transform.position;
@@ -139,54 +138,14 @@ public class Player : MonoBehaviour
 
     }
 
-    public bool IsDestination ()
+    public bool IsDestination()
     {
-        if (Vector2.Distance(new Vector2(transform.position.x,transform.position.z) , new Vector2(target.x,target.z) ) <  0.1f)
+        if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z)) < 0.1f)
         {
             return true;
         }
-        
+
         return false;
-    }
-
-    private void MoveTo(Vector3 target)
-    {
-        Debug.Log("Move");
-        transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
-    }
-
-    private Vector3 SearchTarget(Ray ray)
-    {
-        //float distance = 0;
-        Vector3 target = new Vector3();
-        RaycastHit hit;
-        if (Physics.Raycast(ray,out hit,50f) && hit.collider.tag=="wall")
-        {
-            target = hit.point;
-        }
-        //Debug.Log("direction" + ray.direction);
-        //if (ray.direction.x > 0.5f)
-        //{
-        //    target = new Vector3(transform.position.x + distance - 0.5f, transform.position.y, transform.position.z);
-        //    Debug.Log("vtri :" + transform.position + "target :" + target + "distance :" + distance);
-        //}
-        //if (ray.direction.x < -0.5f)
-        //{
-        //    target = new Vector3(transform.position.x - (distance - 0.5f), transform.position.y, transform.position.z);
-        //    Debug.Log("vtri :" + transform.position + "target :" + target + "distance :" + distance);
-        //}
-        //if (ray.direction.z > 0.5f)
-        //{
-        //    target = new Vector3(transform.position.x, transform.position.y, transform.position.z + distance - 0.5f);
-        //    Debug.Log("vtri :" + transform.position + "target :" + target + "distance :" + distance);
-        //}
-        //if (ray.direction.z < -0.5f)
-        //{
-        //    target = new Vector3(transform.position.x, transform.position.y, transform.position.z - distance + 0.5f);
-        //    Debug.Log("vtri :" + transform.position + "target :" + target + "distance :" + distance);
-        //}
-       // target = Vector3(direction);
-        return target;
     }
 
     private Vector3 GetDirection(Ray ray)
@@ -218,35 +177,13 @@ public class Player : MonoBehaviour
     }
     private void MoveController()
     {
-        // IsMove = false;
-
-
-        //Debug.Log("Ray :" + Ray + "Move :" + IsMove);
-        //Debug.Log("isdestination :" + IsDestination(SearchTarget(Ray), Ray));
-        //if (IsDestination(SearchTarget(Ray), Ray) && IsMove == true)
-        //{
-        //    Debug.Log("direction :" + GetDirection(Ray));
-        //    Debug.Log("ray :" + Ray);
-        //    Debug.Log("target :" + SearchTarget(Ray));
-        //    MoveTo(SearchTarget(Ray));
-        //    Debug.Log("ismoving");
-
-        //}
-        //Debug.Log("IS MOVE :" + IsMove);
-
-        //if (direction.x > 0.5f )
-        //{
-
-        //}
         if (IsMove)
         {
             target.y = transform.position.y;
             transform.position = Vector3.MoveTowards(transform.position , target, Time.fixedDeltaTime *speed);
         }
-       
-
     }
-
+   
     private void ControllerBrick()
     {
 
@@ -275,7 +212,7 @@ public class Player : MonoBehaviour
                 // tăng số lượng gạch lên 1 đv
 
                 count++;
-              //  Debug.Log("1 :" + (count - 2));
+                Debug.Log("1 :" + (count - 2));
             }
             else if (hit.collider.tag == "bridge")
             {
@@ -289,7 +226,7 @@ public class Player : MonoBehaviour
                 if (brickUp.Count <= 3)
                 {
                     Debug.Log("heest sasctk");
-                    gameController.GetComponent<GameController>().ResetGame();
+                    gameController.GetComponent<GameController>().EndGame();
                 }
                 else
                 {
@@ -298,7 +235,8 @@ public class Player : MonoBehaviour
             }
             else if ((hit.collider.tag == "FinishLevel"))
             {
-                NextLevel();
+                gameController.GetComponent<GameController>().getGold(50);
+                gameController.GetComponent<GameController>().PnlNextLevel();
             }
         }
     }
@@ -314,7 +252,8 @@ public class Player : MonoBehaviour
         Debug.Log(brickUp.Count);
         transform.position -= new Vector3(0, 0.75f, 0);
         if (brickUp.Count >= 3)
-        { 
+        {
+            
             Destroy(brickUp.Pop());
             Destroy(brickUp.Pop());
             Destroy(brickUp.Pop());

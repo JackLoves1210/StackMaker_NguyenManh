@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] public bool isStartGame;
+    [SerializeField] Text textGold;
+    [SerializeField] Text textLevel;
+    [SerializeField] static int goldCollect = 0;
     [SerializeField] public GameObject pnlEndGame;
-    [SerializeField] private Text textCOins;
+    [SerializeField] public GameObject pnlNextLevel;
     [SerializeField] private GameManagerment gameManagerment;
     static int numberScene = 1;
     private void Start()
@@ -20,14 +22,13 @@ public class GameController : MonoBehaviour
     {
         gameManagerment = gameObject.GetComponent<GameManagerment>();
         
-        isStartGame = false;
+        GetLevel();
+        pnlEndGame.SetActive(false);
+        pnlNextLevel.SetActive(false);
         Time.timeScale = 1;
+        
+        getGold(0);
         //textCOins = 0;
-    }
-
-    public void GetCoin()
-    {
-
     }
 
     public void ResetGame()
@@ -36,12 +37,36 @@ public class GameController : MonoBehaviour
         Debug.Log("Reset");
     }
 
+    public void GetLevel()
+    {
+        int level = SceneManager.GetActiveScene().buildIndex + 1;
+        textLevel.text = level.ToString();
+    }
+    public void getGold(int goldCollected)
+    {
+        goldCollect+=goldCollected;
+        textGold.text    = goldCollect.ToString();
+    }
     
+    public void StartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
     public void NextLevel(string nameScene)
     {
-        numberScene++;
-        nameScene = "Level " + numberScene;
+        GetLevel();
         gameManagerment.GoToScene(nameScene);
     }
 
+    public void EndGame()
+    {
+        pnlEndGame.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+     public void PnlNextLevel()
+    {
+        pnlNextLevel.SetActive(true);
+        Time.timeScale = 0;
+    }
 }

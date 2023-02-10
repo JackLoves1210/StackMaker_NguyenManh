@@ -111,16 +111,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.0000002, z: 0.2998983}
   m_Center: {x: 0.000006094575, y: -0.00000023841864, z: 0.14994933}
---- !u!114 &7907005706435163742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7389651693250043151}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e94d3d7c3ebf8cd49a28ab716a060ef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sizeBrick: {x: 0, y: 0, z: 0}

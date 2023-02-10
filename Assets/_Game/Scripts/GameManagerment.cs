@@ -5,24 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManagerment : MonoBehaviour
 {
-    private int currentIndex = 0;
-    //string nextSceneName = "Level 1";
-
-
-    public void GoToScene(string nameScene)
+    public void GoToScene(string sceneName)
     {
-        //currentIndex = SceneManager.GetActiveScene().buildIndex;
-        //Debug.Log("currentIndex:" + currentIndex);
-        //currentIndex++;
-        //Debug.Log("Ount:" + SceneManager.sceneCount);
-        //nextSceneName = SceneManager.GetSceneAt(currentIndex).name;
-        //Debug.Log("nextSceneName:" + nextSceneName);
-        SceneManager.LoadScene(nameScene);
+        SceneManager.LoadScene(sceneName);
     }
+
     public void QuitApp()
     {
         Application.Quit();
-        Debug.Log("Quit Compeleted!");
+        Debug.Log("Application has quit");
     }
 
 }
