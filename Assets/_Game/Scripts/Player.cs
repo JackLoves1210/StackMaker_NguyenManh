@@ -61,20 +61,16 @@ public class Player : MonoBehaviour
     private void CheckMovingSwipe()
     {
         Ray Ray = new Ray();
-        Debug.Log(IsDestination());
         if (IsDestination())
         {
             if (swipeControlls.SwipeLeft)
             {
-                Debug.Log("Left");
                 IsMove = true;
                 Ray = ray();
-                Debug.Log("Ray : " + Ray);
                 GetTarget(Ray);
             }
             if (swipeControlls.SwipeRight)
             {
-                Debug.Log("right");
                 IsMove = true;
                 Ray = ray();
                 GetTarget(Ray);
@@ -92,11 +88,9 @@ public class Player : MonoBehaviour
                 GetTarget(Ray);
             }
         }
-        Debug.Log(IsMove);
         if (IsMove)
         {
             target.y = transform.position.y;
-            Debug.Log("target :" + target);
             transform.position = Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * speed);
         }
 
@@ -144,8 +138,6 @@ public class Player : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100f) && hit.collider.tag == "wall")
         {
-            Debug.Log(hit.collider.name);
-            Debug.Log("hit : " + hit.point);
             target = hit.point - direction.normalized *0.5f;
         }
     }
@@ -221,7 +213,7 @@ public class Player : MonoBehaviour
                 // tăng số lượng gạch lên 1 đv
 
                 count++;
-                Debug.Log("1 :" + (count - 2));
+               
             }
             else if (hit.collider.tag == "bridge")
             {
@@ -243,6 +235,7 @@ public class Player : MonoBehaviour
             }
             else if ((hit.collider.tag == "FinishLevel"))
             {
+                Debug.Log("check");
                 FinishLevel();
             }
         }

@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     [SerializeField] public GameObject pnlEndGame;
     [SerializeField] public GameObject pnlNextLevel;
     [SerializeField] private GameManagerment gameManagerment;
-    static int numberScene = 1;
+    int numberScene = 1;
     private void Start()
     {
         OnInit();
