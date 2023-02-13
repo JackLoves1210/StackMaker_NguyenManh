@@ -9,6 +9,12 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject Object;
     [SerializeField] public GameObject gameController;
     [SerializeField] Stack<GameObject> brickUp = new Stack<GameObject>();
+    [SerializeField] private Swipe swipeControlls;
+    Vector3 desiredPosition;
+    
+
+    private Vector3 startTouchPosition;
+    private Vector3 endTouchPosition;
 
     bool IsMove = false;
 
@@ -24,13 +30,79 @@ public class Player : MonoBehaviour
     {
         
         gameController = GameObject.FindGameObjectWithTag("GameController");
+        swipeControlls = GameObject.FindObjectOfType<Swipe>();
         direction = Vector3.right;
         target = transform.position;
+        desiredPosition = transform.position;   
     }
 
     private void Update()
     {
         // input => var
+
+        // checkMoving();
+        CheckMovingSwipe();
+        MoveController();
+        ControllerBrick();
+    }
+
+   
+    void FixedUpdate()
+    {
+       // move: var 
+
+        //Moving
+        //MoveController();
+        //AddBrick
+       // ControllerBrick();
+
+    }
+
+    private void CheckMovingSwipe()
+    {
+        Ray Ray = new Ray();
+        Debug.Log(IsDestination());
+        if (IsDestination())
+        {
+            if (swipeControlls.SwipeLeft)
+            {
+                Debug.Log("Left");
+                IsMove = true;
+                Ray = ray();
+                Debug.Log("Ray : " + Ray);
+                GetTarget(Ray);
+            }
+            if (swipeControlls.SwipeRight)
+            {
+                Debug.Log("right");
+                IsMove = true;
+                Ray = ray();
+                GetTarget(Ray);
+            }
+            if (swipeControlls.SwipeForward)
+            {
+                IsMove = true;
+                Ray = ray();
+                GetTarget(Ray);
+            }
+            if (swipeControlls.SwipeBackward)
+            {
+                IsMove = true;
+                Ray = ray();
+                GetTarget(Ray);
+            }
+        }
+        Debug.Log(IsMove);
+        if (IsMove)
+        {
+            target.y = transform.position.y;
+            Debug.Log("target :" + target);
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.fixedDeltaTime * speed);
+        }
+
+    }
+    private void checkMoving()
+    {
         Ray Ray = new Ray();
         Debug.Log(IsDestination());
         if (IsDestination())
@@ -38,7 +110,9 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D))
             {
                 IsMove = true;
+                
                 Ray = ray();
+                
                 GetTarget(Ray);
             }
             else if (Input.GetKeyDown(KeyCode.A))
@@ -61,81 +135,19 @@ public class Player : MonoBehaviour
                 GetTarget(Ray);
             }
         }
-    }
-
-    void FixedUpdate()
-    {
-       // move: var 
-
-        //Moving();
-        MoveController();
-        //AddBrick();
-        ControllerBrick();
 
     }
-
     void GetTarget(Ray ray)
     {
         direction = GetDirection(ray);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100f))
+
+        if (Physics.Raycast(ray, out hit, 100f) && hit.collider.tag == "wall")
         {
+            Debug.Log(hit.collider.name);
+            Debug.Log("hit : " + hit.point);
             target = hit.point - direction.normalized *0.5f;
         }
-    }
-
-    void Moving()
-    {
-        if (Input.GetKey(KeyCode.D))
-        {
-            Debug.Log("Move D");
-            Ray ray = new Ray(transform.position, transform.right);
-            RaycastHit hit;
-            Debug.DrawLine(transform.position, transform.position + Vector3.right * 100f, color: Color.red);
-            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "wall")
-            {
-                float distance = hit.distance;
-                Vector3 taget = new Vector3(transform.position.x + distance , transform.position.y, transform.position.z) - transform.position;
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x + distance, transform.position.y, transform.position.z), Time.deltaTime * speed);
-            }
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            Debug.Log("Move W");
-            Ray ray = new Ray(transform.position, Vector3.forward);
-            RaycastHit hit;
-            Debug.DrawLine(transform.position, transform.position + Vector3.forward * 100f, color: Color.red);
-            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "wall")
-            {
-
-                Debug.Log(hit.collider.name);
-                float distance = hit.distance;
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, transform.position.z + distance - 0.5f), Time.deltaTime * speed);
-            }
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            Ray ray = new Ray(transform.position, - transform.right);
-            RaycastHit hit;
-            Debug.DrawLine(transform.position, transform.position + Vector3.left * 100f, color: Color.red);
-            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "wall")
-            {
-                float distance = hit.distance;
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x - distance + 0.5f, transform.position.y, transform.position.z), Time.deltaTime * speed);
-            }
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            Ray ray = new Ray(transform.position, Vector3.back);
-            RaycastHit hit;
-            Debug.DrawLine(transform.position, transform.position + Vector3.back * 100f, color: Color.red);
-            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "wall")
-            {
-                float distance = hit.distance;
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, transform.position.z - distance +0.5f), Time.deltaTime * speed);
-            }
-        }
-
     }
 
     public bool IsDestination()
@@ -156,19 +168,19 @@ public class Player : MonoBehaviour
     {
         Ray ray;
         Vector3 driection = new Vector3();
-        if (Input.GetKeyDown(KeyCode.D))
+        if (swipeControlls.SwipeRight)
         {
             driection = Vector3.right;
         }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
+        else if (swipeControlls.SwipeLeft)
+            {
             driection = Vector3.left;
         }
-        else if(Input.GetKeyDown(KeyCode.S))
+        else if (swipeControlls.SwipeBackward)
         {
             driection = Vector3.back;
         }
-        else if (Input.GetKeyDown(KeyCode.W))
+        else if (swipeControlls.SwipeForward)
         {
             driection = Vector3.forward;
         }
@@ -191,11 +203,8 @@ public class Player : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + Vector3.down * 100f, color: Color.red);
         if (Physics.Raycast(transform.position,  Vector3.down, out hit, 100f))
         {
-           // Debug.Log("test");
-           // Debug.Log(hit.collider.name);
             if (hit.collider.tag == "brick")
             {
-               // Debug.Log("1");
                 // Tạo 1 stack ngay dưới stack cũ
                 GameObject obj = Instantiate(Object, new Vector3(transform.position.x, transform.position.y - count * stack.y, transform.position.z), Quaternion.identity) as GameObject;
 
@@ -225,8 +234,7 @@ public class Player : MonoBehaviour
                 Destroy(hit.collider.gameObject);
                 if (brickUp.Count <= 3)
                 {
-                    Debug.Log("heest sasctk");
-                    gameController.GetComponent<GameController>().EndGame();
+                    EndGame();
                 }
                 else
                 {
@@ -235,8 +243,7 @@ public class Player : MonoBehaviour
             }
             else if ((hit.collider.tag == "FinishLevel"))
             {
-                gameController.GetComponent<GameController>().getGold(50);
-                gameController.GetComponent<GameController>().PnlNextLevel();
+                FinishLevel();
             }
         }
     }
@@ -260,11 +267,14 @@ public class Player : MonoBehaviour
         }
     }
 
-
-    public void NextLevel()
+    private void FinishLevel()
     {
-        
-        gameController.GetComponent<GameController>().NextLevel("");
+        gameController.GetComponent<GameController>().getGold(50);
+        gameController.GetComponent<GameController>().PnlNextLevel();
     }
 
+    private void EndGame()
+    {
+        gameController.GetComponent<GameController>().EndGame();
+    }
 }

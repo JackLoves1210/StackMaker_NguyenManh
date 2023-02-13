@@ -1601,6 +1601,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3753414226860548768, guid: 680fafd85c16f024192891099b1460ee, type: 3}
   m_PrefabInstance: {fileID: 1707519971}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &100812947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3303305140234123498, guid: 5448e75e3b3d2dd43a0f2519ba167766, type: 3}
+  m_PrefabInstance: {fileID: 1694363635}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &100812949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100812947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09cac30c957ef14aadf17db0c93e1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &106815248 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3753414226860548768, guid: 680fafd85c16f024192891099b1460ee, type: 3}
@@ -9755,8 +9772,6 @@ Transform:
   - {fileID: 1953351638}
   - {fileID: 128276254}
   - {fileID: 1040896551}
-  - {fileID: 983517720}
-  - {fileID: 1730585088}
   - {fileID: 396252031}
   - {fileID: 331873396}
   - {fileID: 1224891448}
@@ -9773,6 +9788,7 @@ Transform:
   - {fileID: 894687296}
   - {fileID: 1707194195}
   - {fileID: 495311332}
+  - {fileID: 1730585088}
   - {fileID: 1488488496}
   - {fileID: 2075518404}
   - {fileID: 198524126}
@@ -9820,6 +9836,7 @@ Transform:
   - {fileID: 1495034739}
   - {fileID: 1810345663}
   - {fileID: 600845952}
+  - {fileID: 983517720}
   - {fileID: 1791241956}
   - {fileID: 1339114133}
   - {fileID: 1700379389}
@@ -21877,6 +21894,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3301798714767968795, guid: 5448e75e3b3d2dd43a0f2519ba167766, type: 3}
+      propertyPath: swipeControlls
+      value: 
+      objectReference: {fileID: 100812949}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5448e75e3b3d2dd43a0f2519ba167766, type: 3}
 --- !u!1001 &1696140299
@@ -27560,7 +27581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  offset: {x: 0, y: 6.5, z: -5}
+  offset: {x: 0, y: 17, z: -15}
   speed: 20
 --- !u!81 &2040597705
 AudioListener:
@@ -28767,9 +28788,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e135349d0baaea4cbdba6bac4328587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isStartGame: 0
+  textGold: {fileID: 0}
+  textLevel: {fileID: 0}
   pnlEndGame: {fileID: 0}
-  textCOins: {fileID: 0}
+  pnlNextLevel: {fileID: 0}
   gameManagerment: {fileID: 0}
 --- !u!114 &2102950232
 MonoBehaviour:
